@@ -44,4 +44,4 @@ A tool for reversible computation in C++ based on incremental state saving.
 
 * The Backstroke user manual is available as part of the Backstroke
   distribution at:
-  https://github.com/LLNL/backstroke/docs/user-manual.pdf.
+  https://github.com/LLNL/backstroke/blob/master/docs/user-manual.pdf
