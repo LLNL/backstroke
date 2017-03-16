@@ -1,0 +1,141 @@
+V2.1.0  2017-03-15 Markus Schordan <schordan1@llnl.gov>
+	* public release
+V2.0.16 2016-09-30 Markus Schordan <schordan1@llnl.gov>
+	* refined ROSS support (this version allows to run the KMC
+	  model in optimistic pdes mode with C++ STL).
+	* added new C++11 container tests with template specialization to test
+	  forward/reverse/commit after each operation.
+	* added C++11 STL tests (passing for all STL containers (except valarray        * added support for C++11 STL containers
+))
+	* added support for switching between recording and not recording
+	  of data for reversibility. This allows to share a type in
+	  reversible and non-reversible code sections.
+	* removed the generation of namespaces (this simplifies the use of
+	  Backstroke)
+V2.0.15 2016-07-08 Markus Schordan <schordan1@llnl.gov>
+	* added exception handling (Backstroke::Exception) to the
+	  Backstroke runtime library. For every detected error an exception of
+	  this type is thrown.
+	* added test for Backstroke::Exception.
+	* Changed STL tests to use EDG C pre-processor.
+	* removed use of iostream from Backstroke library.
+ 	* removed functions initializeEvent and finalizeEvent
+	  (using beginEvent, endEvent instead now).
+
+V2.0.14 2016-06-17 Markus Schordan <schordan1@llnl.gov>
+	* made --access-mode=1 the default (before it was --access-mode=2)
+	* added xpdes interface to the Backstroke library and a new mode
+  	  to generate calls to the xpdes interface in transformed code.
+	* updated documentation to reflect the changes in the code
+	  transformations and descriptions.
+	* adapted all tests to use xpdes mode.
+	* bugfix: copy assignment operator generation for class data
+	  members of type multi-dimensional array, defined using typedefs
+	  for different dimensions (reported by Euna Kim)
+	* added new tests for multi-dimensional C arrays
+
+V2.0.13 2016-05-13 Markus Schordan <schordan1@llnl.gov>
+	* this version allows to use generated code without wrapping it
+	  into a namespace.
+	* added new information recording mode, allowing to select
+	  reversibility at run time.
+	* refinement of assignment operator generation (avoiding to
+	  conflict with existing non-default assignment operators with the
+	  same function signature but different return type)
+        * bugfix: placement new
+	* refined stl-list test to use new mode and all STL headers.
+	* removed command line options namespace,
+	  eliminate-global-operator-decls, duplicate.
+	* renamed namespace singleton to xpdes (preparation for xpdes
+	  interface).
+
+V2.0.12 2016-03-16 Markus Schordan <schordan1@llnl.gov>
+	* added generation of reversible default assignment operators
+	* added generation of reversible default copy constructors
+	* added new command line options
+	  --namespace --no-namespace
+	  --no-assign-op
+	  --eliminate-global-operator-decls
+	  --duplicate --no-duplicate
+	  --copy-constr --no-copy-constr
+	  --lib-header --no-lib-header
+	  --opt-local-var --no-opt-local-var
+	* improved runtime lib to provide all functions in header for inlining
+	* bugfix: switched data queue ends for commit event
+	* bugfix: support for delete and delete[] when applied to null pointer
+
+V2.0.11 2015-12-03 Markus Schordan <schordan1@llnl.gov>
+	* improved generic interface in backstroke library (access-mode=2)
+	  to handle more C++ types.
+	* added new command line options --duplicate, --namespace,
+	  --eliminate-global-operator-decls, --lib-header
+	* bugfix: removed redundant initialization of ROSE name qualification
+	  (reported by Euna Kim and Jacob I. Sacks)
+
+V2.0.10 2015-11-10 Markus Schordan <schordan1@llnl.gov>
+	* added new backend feature to support templates
+	* added new command line option --access-mode=arg to select different
+	forms of Backstroke library API access in the generated code.
+	* added command line option for computing transformation
+	statistics and writing the results to a CSV file.
+	* added generic interface(s) to the Backstroke library API
+	* added stl tests (transformation and compile)
+
+V2.0.9 2015-09-29 Markus Schordan <schordan1@llnl.gov>
+	* bugfix: array allocation/deallocation in backstroke runtime library.
+
+V2.0.8 2015-07-24 Markus Schordan <schordan1@llnl.gov>
+	* Unified use of unparse functions for types and expressions.
+	* bugfix: adapted code generation for unparsing of transformed
+	'new' operator inside templates. In some cases the unparser
+	entered an infinite loop (reported by Chris Hood). The unified use
+	of code generation functions eliminates all those problematic
+	cases.
+
+V2.0.7 2015-06-25 Markus Schordan <schordan1@llnl.gov>
+	* bugfix: runtimelib: callArrayElementDestructors. Fixed name of
+	used template parameter (reported by Chris Hood).
+	* bugfix: ensured that no digraph '<:' is present in generated
+	code (reported by Chris Hood).
+	* Added support for improved source code formatting.
+
+V2.0.6 2015-06-17 Markus Schordan <schordan1@llnl.gov>
+	* Refined support for backstroke directive '#pragma reverse
+	exclude'
+	* bugfix: added generation of missing cast in transformed forward
+	code for returned values of avpushptr as required for expressions
+	that perform pointer arithmetic (reported by Chris Hood).
+	* Added test case for pointer arithmetic and reduced number of
+	loops in runtime tests to reduce 'make check' time.
+
+V2.0.5 2015-06-08 Markus Schordan <schordan1@llnl.gov>
+	* Added backstroke directive '#pragma reverse exclude'
+	* Adapted tests for more extensive memory allocation/deallocation
+	and scaling evaluation.
+	* Updated documentation with new directive.
+
+V2.0.4 2015-05-13 Markus Schordan <schordan1@llnl.gov>
+	* Changed callArrayElementDestructors signature and adapted
+	generated code.
+	* Added new options --access-operator-arrow and	--access-operator-dot
+	* Added support for event record reuse memory allocation scheme
+	* Changed init_stack_info to become a static function
+
+V2.0.3 2015-05-03 Markus Schordan <schordan1@llnl.gov>
+	* Added mechanism for reuse of EventRecords. The RTL can now also
+	be initialized with the number of event records to be
+	pre-allocated as parameter of the RunTimeStateStorage constructor.
+
+V2.0.2 2015-04-03 Markus Schordan <schordan1@llnl.gov>
+	* bugfix: handling of array element types of type
+	class/struct/union in array memory allocation operations: the
+	generated reinterpret-cast in the forward code now properly uses
+	the correct class name in case an array element is of type
+	class/struct/union.
+
+V2.0.1 2015-02-23 Markus Schordan <schordan1@llnl.gov>
+	* C-arrays: improved memory allocation/deallocation for C-arrays
+	in case of rollbacks.
+
+V2.0.0 2015-01-30 Markus Schordan <schordan1@llnl.gov>
+	* initial version
