@@ -1,0 +1,3 @@
+docs/* linguist-documentation
+*.h linguist-language=c++
+*.C linguist-language=c++
