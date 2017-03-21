@@ -16,7 +16,7 @@ user-manual.pdf: $(DOCS_DIR)/user-manual.tex $(EXAMPLES)
 	@echo "Generated: user-manual.pdf"
 
 clean:
-	@rm -f *.log *.aux *.toc *.bbl *.blg *.pdf
+	@rm -f *.log *.aux *.toc *.bbl *.blg
 
 distclean: clean
 	@rm -f *.pdf 
