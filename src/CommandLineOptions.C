@@ -444,7 +444,7 @@ std::string Backstroke::CommandLineOptions::preProcessTranslationUnit(int argc, 
   int inputFileNameArgc=-1;
   string compiler=string(line_p);
   compiler.erase(remove_if(compiler.begin(), compiler.end(), ::isspace), compiler.end()); // remove whitespace
-  if(true || this->optionStatusMessages()) {
+  if(this->optionStatusMessages()) {
     cout<<"STATUS: using compiler "<<compiler<<" for pre-processing."<<endl;
   }
   // rename input file to name of preprocessed file in argv
