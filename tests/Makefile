@@ -66,7 +66,7 @@ check: check-local
 check-local: backstroke.passed check-stl-containers
 
 backstroke.passed: $(BACKSTROKE_LIB_OBJ)
-	@echo "Checking backstroke library ..."
+	@echo "Checking rtss library ..."
 	@$(CXX) $(MY_INCLUDES) $(srcdir)/$(BACKSTROKE_LIB_TEST).C $(BACKSTROKE_LIB_OBJ) $(EXTRA_LIBS) -o$(BACKSTROKE_LIB_TEST);
 	@./bs-lib-test
 	@echo "PASS"
