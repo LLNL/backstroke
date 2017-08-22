@@ -689,8 +689,8 @@ bool Backstroke::Utility::isInsideNamespace(SgDeclarationStatement* declStmt) {
   return false;
 }
 bool Backstroke::Utility::checkRoseVersionNumber(const std::string &need) {
-    std::vector<std::string> needParts = rose::StringUtility::split('.', need);
-    std::vector<std::string> haveParts = rose::StringUtility::split('.', ROSE_PACKAGE_VERSION);
+    std::vector<std::string> needParts = Rose::StringUtility::split('.', need);
+    std::vector<std::string> haveParts = Rose::StringUtility::split('.', ROSE_PACKAGE_VERSION);
 
     for (size_t i=0; i < needParts.size() && i < haveParts.size(); ++i) {
         if (needParts[i] != haveParts[i])

@@ -34,6 +34,7 @@ BS_STL_SUPPORT=
 BS_RESTRICTIONS=
 BS_LIB_INCLUDE_OPTION_CHECK="-include backstroke/rtss.h"
 BS_LIB_INCLUDE_OPTION="--rtss-header"
+GCC_OPTIONS=-fabi-version=6
 
 echo "BS_RTLIB_INCLUDE_OPTIONS: ${BS_RTLIB_INCLUDE_OPTIONS}"
 
@@ -66,7 +67,7 @@ for header in $STL_HEADERS_PASS; do
       if [ -e backstroke_test_${header}.C ]
       then
           cp backstroke_test_${header}.C backstroke_test_$header.t1.pass.C
-          ${TOOL1} -std=$BS_OUTPUT_LANG_STANDARD $BS_RTLIB_INCLUDE_OPTIONS backstroke_test_${header}.C -w -Wfatal-errors $BS_STL_SUPPORT #> /dev/null 2>&1
+          ${TOOL1} -std=$BS_OUTPUT_LANG_STANDARD $BS_RTLIB_INCLUDE_OPTIONS backstroke_test_${header}.C -w -Wfatal-errors $BS_STL_SUPPORT $GCC_OPTIONS #> /dev/null 2>&1
            if [ $? -eq 0 ]; then
               cp backstroke_test_${header}.C backstroke_test_$header.t2.pass.C
               echo -n " PASS : 100.00%" # 2

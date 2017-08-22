@@ -55,13 +55,13 @@
 \newcommand{\commitfunction}{commit-function}
 
 \newcommand{\bsshortversion}{2.1}
-\newcommand{\bslongversion}{2.1.0}
+\newcommand{\bslongversion}{2.1.1}
 
 \sloppy
 
 \title{Backstroke \bslongversion\\User Manual\\{\footnotesize LLNL-SM-719981}}  % declares the document's title.
 \author{Markus Schordan} % declares the author's name.
-\date{March 15, 2017} % deleting this command produces today's date.
+\date{August 21, 2017} % deleting this command produces today's date.
 
 \setlength{\parindent}{0cm}
 
@@ -160,9 +160,9 @@ command line.
 When Backstroke is compiled it uses the ROSE tool \verb+rose-config+
 to obtain all configure information from the ROSE
 installation. Therefore no configuration of Backstroke is necessary.
-This version of Backstroke requires at least ROSE version 0.9.8.5 (see
+This version of Backstroke requires at least ROSE version 0.9.9.87 (see
 file \verb+ROSE_VERSION+ in the ROSE distribution) and has been tested
-with GNU g++ 4.8. When Backstroke is run, it checks at runtime whether the
+with GNU g++ 4.9. When Backstroke is run, it checks at runtime whether the
 version of the installed ROSE library is sufficient or whether an
 update of ROSE is necessary.
 
@@ -853,7 +853,7 @@ benefit greatly.
 
 Optimization level 3 can reduce the {\em overhead} of
 the Backstroke generated instrumentations significantly. For example,
-to get good performance with GNU g++ 4.8 or later, use the options \verb+-O3 --finline-limit=1000000+.
+to get good performance with GNU g++ 4.9 or later, use the options \verb+-O3 --finline-limit=1000000+.
 
 \section{Limitations}
 

@@ -1,17 +1,25 @@
+V2.1.1  2017-08-21 Markus Schordan <schordan1@llnl.gov>
+	* updated to ROSE version 0.9.9.87 (C++ frontend EDG 4.12 and use
+	  of new namespace 'Rose')
+	* fixed pre-processor status message to be only printed when
+	  requested with option --status.
+
 V2.1.0  2017-03-15 Markus Schordan <schordan1@llnl.gov>
 	* public release
+
 V2.0.16 2016-09-30 Markus Schordan <schordan1@llnl.gov>
 	* refined ROSS support (this version allows to run the KMC
 	  model in optimistic pdes mode with C++ STL).
 	* added new C++11 container tests with template specialization to test
 	  forward/reverse/commit after each operation.
-	* added C++11 STL tests (passing for all STL containers (except valarray        * added support for C++11 STL containers
-))
+	* added C++11 STL tests (passing for all STL containers (except valarray))
+	* added support for C++11 STL containers
 	* added support for switching between recording and not recording
 	  of data for reversibility. This allows to share a type in
 	  reversible and non-reversible code sections.
 	* removed the generation of namespaces (this simplifies the use of
 	  Backstroke)
+
 V2.0.15 2016-07-08 Markus Schordan <schordan1@llnl.gov>
 	* added exception handling (Backstroke::Exception) to the
 	  Backstroke runtime library. For every detected error an exception of

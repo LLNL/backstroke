@@ -79,7 +79,7 @@ void ensureSingleInputFile(SgProject* root) {
 
 int main(int argc, char* argv[]) {
   try {
-    string requiredRoseVersion="0.9.8.5";
+    string requiredRoseVersion="0.9.9.87"; // previous: 0.9.8.5"
     if(!Backstroke::Utility::checkRoseVersionNumber(requiredRoseVersion)) {
       cerr<<"Error: installed version of ROSE is too old. Required ROSE version is "<<requiredRoseVersion<<"."<<endl;
       return 1;

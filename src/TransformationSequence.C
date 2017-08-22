@@ -51,6 +51,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
 #include "CommandLineOptions.h"
 #include "RoseAst.h"
 #include "Utility.h"
+#include "AstTerm.h"
 
 using namespace std;
 
@@ -452,7 +453,12 @@ void Backstroke::TransformationSequence::applyToFile(OriginalFile& originalFile)
           operand=adjustCompilerGeneratedExpr(operand);
           int startLineOp=operand->get_startOfConstruct()->get_raw_line()+edgCorr;
           int startColOp=operand->get_startOfConstruct()->get_raw_col()+edgCorr;
-          if(_commandLineOptions->optionDebug()) cout<<"DEBUG: arr operand: "<<Utility::unparseExprToString(operand)<<" "<<startLineOp<<":"<<startColOp<<endl;
+          if(_commandLineOptions->optionDebug()) {
+            cout<<"DEBUG: arr operand: "<<Utility::unparseExprToString(operand)<<" "<<startLineOp<<":"<<startColOp<<endl;
+            cout<<"DEBUG: arr operand: deleteNode: "<<deleteNode->unparseToString()<<endl;
+            cout<<"DEBUG: arr operand: operandNode: "<<operand->unparseToString()<<endl;
+            cout<<"DEBUG: arr operand: operandNode: "<<AstTerm::astTermWithNullValuesToString(operand)<<endl;
+          }
           _editSequence.addToDelete(startLine,startCol,startLineOp,startColOp-1);
           break;
         }
@@ -465,7 +471,7 @@ void Backstroke::TransformationSequence::applyToFile(OriginalFile& originalFile)
 
           if(ci.injectionLine()>=0 && ci.numberOfDataMembers()>0) {
             stringstream ss;
-            //ss<<"/*INSTRUMENTATION:"<<ci.injectionLine()<<","<<ci.injectionCol()<<"*/"; // infoline
+            ss<<"/*INJECTEDONSTRUCTOR:"<<ci.injectionLine()<<","<<ci.injectionCol()<<"*/"; // infoline
             _editSequence.addToInsert(ci.injectionLine(),
                                       ci.injectionCol(), 
                                       ss.str()+ci.implAllDefaultOperators(classDef,
@@ -699,11 +705,17 @@ string Backstroke::TransformationStatistics::toCsvString() {
 SgExpression* Backstroke::TransformationSequence::adjustCompilerGeneratedExpr(SgExpression* expr) {
   // match if this is the compiler-generated pattern 'this->originalExpression' and normalize
   if(expr->isCompilerGenerated()) {
+    if(_commandLineOptions->optionDebug()) cout<<"DEBUG: adjustCompilerGeneratedExpr: compiler generated: "<<expr->unparseToString()<<endl;
     if(SgArrowExp* arrowExp=isSgArrowExp(expr)) {
       SgExpression* lhs=isSgExpression(SgNodeHelper::getLhs(arrowExp));
       SgExpression* rhs=isSgExpression(SgNodeHelper::getRhs(arrowExp));
+      if(_commandLineOptions->optionDebug()) cout<<"DEBUG: adjustCompilerGeneratedExpr: isSgThisExp(lhs):"<<isSgThisExp(lhs)<<" compiler generated: LHS: "<<lhs->isCompilerGenerated()<<" RHS: "<<rhs->isCompilerGenerated()<<endl;
+      if(isSgCastExp(lhs)&&lhs->isCompilerGenerated()) {
+        lhs=isSgCastExp(lhs)->get_operand();
+      }
       if(isSgThisExp(lhs)&&lhs->isCompilerGenerated()&&!rhs->isCompilerGenerated()) {
         // set expr to refer to the original expr
+        if(_commandLineOptions->optionDebug()) cout<<"DEBUG: adjustCompilerGeneratedExpr: compiler generated: adjusted expr to: "<<rhs->unparseToString()<<endl;
         return rhs;
       }
     }
