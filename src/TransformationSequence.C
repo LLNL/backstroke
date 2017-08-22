@@ -471,7 +471,7 @@ void Backstroke::TransformationSequence::applyToFile(OriginalFile& originalFile)
 
           if(ci.injectionLine()>=0 && ci.numberOfDataMembers()>0) {
             stringstream ss;
-            ss<<"/*INJECTEDONSTRUCTOR:"<<ci.injectionLine()<<","<<ci.injectionCol()<<"*/"; // infoline
+            //ss<<"/*BACKSTROKE GENERATED:"<<ci.injectionLine()<<","<<ci.injectionCol()<<"*/"; // infoline
             _editSequence.addToInsert(ci.injectionLine(),
                                       ci.injectionCol(), 
                                       ss.str()+ci.implAllDefaultOperators(classDef,
