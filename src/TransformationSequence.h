@@ -75,6 +75,7 @@ namespace Backstroke {
     void decrement(TransformationOperation transOp);
     std::string toString();
     std::string toCsvString();
+    int generatedDefaultAssignOpNum=0;
   private:
     size_t operatorsCount[TRANSOP_NUM];
   };

@@ -479,6 +479,8 @@ void Backstroke::TransformationSequence::applyToFile(OriginalFile& originalFile)
                                                                  _dataMemberTypesInsideUnions
                                                                  )
                                       );
+	    if(ci.generatedDefaultAssignOp())
+	      _transformationStatistics.generatedDefaultAssignOpNum++;
           }
           // Generate names for all anonymous classes/structs/unions to allow constructors to be named
           if(ci.isAnonymous()) {
@@ -663,6 +665,7 @@ void Backstroke::TransformationStatistics::init() {
   for(int i=0;i<TRANSOP_NUM;i++) {
     operatorsCount[i]=0;
   }
+  generatedDefaultAssignOpNum=0;
 }
 
 void Backstroke::TransformationStatistics::increment(TransformationOperation transOp) {
@@ -683,6 +686,7 @@ string Backstroke::TransformationStatistics::toString() {
     ss<<transformationOperationName[i]<<": "<<operatorsCount[i]<<endl;
     total+=operatorsCount[i];
   }
+  ss<<"DefaultAssignOpNum: "<<generatedDefaultAssignOpNum<<endl;
   ss<<"Total: "<<total<<endl;
   return ss.str();
 }

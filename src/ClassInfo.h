@@ -105,6 +105,7 @@ namespace Backstroke {
     BitFieldDeclarationList getBitFieldDeclarationList();
     std::size_t numBitFields();
     SgAccessModifier getFirstDataMemberAccessModifier();
+    bool generatedDefaultAssignOp();
   private:
     void determineBitFields();
     std::string reversibleCopyCode();
@@ -121,7 +122,8 @@ namespace Backstroke {
     std::string _className;
     std::string _rtssAccess;
     bool _hasConstDataMember;
-    bool _hasCLinkage;
+    bool _hasCLinkage; // obsolete
+    bool _generatedDefaultAssignOp=false;
   };
 
 } // end of namespace Backstroke

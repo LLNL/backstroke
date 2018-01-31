@@ -284,8 +284,13 @@ int Backstroke::ClassInfo::injectionCol() {
   return -1;
 }
 
+bool Backstroke::ClassInfo::generatedDefaultAssignOp() {
+  return _generatedDefaultAssignOp;
+}
+
 std::string Backstroke::ClassInfo::implAllDefaultOperators(SgClassDefinition* classDef, CommandLineOptions* clo, std::set<SgType*>& dataMemberTypesInsideUnions) {
   std::string impl;
+  _generatedDefaultAssignOp=false;
   if(!hasConstDataMember()&&!hasCLinkage()) {
     if(!hasDefaultConstructor()&&clo->optionGenerateDefaultConstructor()) {
       impl+=implConstructor();
@@ -299,6 +304,7 @@ std::string Backstroke::ClassInfo::implAllDefaultOperators(SgClassDefinition* cl
       // by default unions are addressed (optionUnion==true). The false-case is only for experimental purposes for c++98 code.
       if(clo->optionUnion()==true) {
         impl+=implCopyAssignOperator();
+	_generatedDefaultAssignOp=true;
       } else {
         ROSE_ASSERT(false);
       }
