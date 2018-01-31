@@ -676,8 +676,9 @@ void Backstroke::TransformationStatistics::decrement(TransformationOperation tra
 string Backstroke::TransformationStatistics::toString() {
   stringstream ss;
   std::string transformationOperationName[]={ "Assignment", "MemoryAlloc", "MemoryAllocArray", 
-                                              "MemoryDelete", "MemoryDeleteArray" };
+                                              "MemoryDelete", "MemoryDeleteArray", "Classdef","DeclBitField","FunCallDelete","FunCallNew","MemberFunctionDecl" };
   int total=0;
+  cerr<<"PRINTING STATS"<<endl;
   for(int i=0;i<TRANSOP_NUM;i++) {
     ss<<transformationOperationName[i]<<": "<<operatorsCount[i]<<endl;
     total+=operatorsCount[i];
