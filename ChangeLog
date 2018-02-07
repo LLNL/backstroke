@@ -1,3 +1,9 @@
+V2.1.2  2018-02-06 Markus Schordan <schordan1@llnl.gov>
+	* Added statistics for generation of reversible default assignment
+	  operators (option --stats)
+	* Fixed crashing statistics report on cout (option --stats)
+	* Fixed ROSE version check.
+	* Removed comment in generated code.
 V2.1.1  2017-08-21 Markus Schordan <schordan1@llnl.gov>
 	* updated to ROSE version 0.9.9.87 (C++ frontend EDG 4.12 and use
 	  of new namespace 'Rose')
