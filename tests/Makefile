@@ -52,12 +52,15 @@ FEATURETESTDRIVER=featuretestdriver
 
 BACKSTROKE_LIB_TEST=bs-lib-test
 
-#ALTERNATIVE_STL_OPTIONS=-nostdlib -nodefaultlibs -lgcc -I$(ALTERNATIVE_STL_INCLUDE)
+#REVERSIBLE_STDLIB_OPTIONS=-nostdlib -nodefaultlibs -lgcc -I$(REVERSIBLE_STDLIB_HEADERS)
 #-nostdinc++
-#ALTERNATIVE_STL=
-#MY_INCLUDE_ALTERNATIVE_STL=-I$(MODIFIED_STL)
-MY_INCLUDES_ALTERNATIVE_STL=
-MY_INCLUDES=$(MY_INCLUDES_ALTERNATIVE_STL) -I$(srcdir)/../src -I$(srcdir)/../tests -I$(srcdir)/../src/rtss
+
+#MY_INCLUDES_REVERSIBLE_STDLIB_HEADERS=-I$(REVERSIBLE_STDLIB_HEADERS)
+MY_INCLUDES_REVERSIBLE_STDLIB_HEADERS=
+MY_INCLUDES=$(MY_INCLUDES_REVERSIBLE_STDLIB_HEADERS) -I$(srcdir)/../src -I$(srcdir)/../tests -I$(srcdir)/../src/rtss
+
+#REVERSIBLE_STDLIB_DEPENDENT_TESTS_OPTION=-DREVERSIBLE_STDLIB_DEPENDENT_TESTS
+REVERSIBLE_STDLIB_DEPENDENT_TESTS_OPTION=
 
 all:
 
@@ -136,7 +139,7 @@ backstroke.passed: $(BACKSTROKE_LIB_OBJ)
 check-stl-containers: $(BACKSTROKE_LIB_OBJ)
 	@echo "STL container run tests"
 #	$(CXX) -E -P -std=$(BS_INPUT_LANG_STANDARD) $(MY_INCLUDES) $(srcdir)/teststlcontainers.C > teststlcontainers.pp.C
-	$(BACKSTROKE_EXE) --preprocessor -std=$(BS_INPUT_LANG_STANDARD) $(BACKSTROKE_MODE) $(BACKSTROKE_BACKEND) --edg:no_warnings -I../src/rtss -I../src teststlcontainers.C
+	$(BACKSTROKE_EXE) --preprocessor $(MY_INCLUDES) $(REVERSIBLE_STDLIB_DEPENDENT_TESTS_OPTION) -std=$(BS_INPUT_LANG_STANDARD) $(BACKSTROKE_MODE) $(BACKSTROKE_BACKEND) --edg:no_warnings -I../src/rtss -I../src teststlcontainers.C
 	$(CXX) -O3 -std=c++11 backstroke_teststlcontainers.C -o$(BACKSTROKE_BUILD_TEST_DIR)/teststlcontainers $(BACKSTROKE_LIB_OBJ) -Wfatal-errors $(EXTRA_LIBS)
 	@echo
 	@echo "Checking STL containers with headers, Operations (specific updates) [alloc mode: default]"

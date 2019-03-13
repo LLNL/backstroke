@@ -334,7 +334,7 @@ void Backstroke::ClassInfo::determineBitFields() {
     SgNode* node=(*i).first;
     string name=(*i).second;
     if(SgVariableDeclaration* varDecl=isSgVariableDeclaration(node)) {
-      SgValueExp* bitfieldValExp=varDecl->get_bitfield();
+      SgExpression* bitfieldValExp=varDecl->get_bitfield();
       if(bitfieldValExp!=0) {
 	_bitFieldVarDecls.push_back(varDecl);
       }
@@ -351,7 +351,7 @@ std::string Backstroke::ClassInfo::reversibleCopyCode() {
     SgNode* node=(*i).first;
     string name=(*i).second;
     if(SgVariableDeclaration* varDecl=isSgVariableDeclaration(node)) {
-      SgValueExp* bitfieldValExp=varDecl->get_bitfield();
+      SgExpression* bitfieldValExp=varDecl->get_bitfield();
       const SgInitializedNamePtrList& initNameList=varDecl->get_variables();
       const SgDeclarationModifier& declModifier=varDecl->get_declarationModifier();
       const SgStorageModifier& storageModifier=declModifier.get_storageModifier();
