@@ -306,7 +306,7 @@ std::string Backstroke::ClassInfo::implAllDefaultOperators(SgClassDefinition* cl
         impl+=implCopyAssignOperator();
 	_generatedDefaultAssignOp=true;
       } else {
-        ROSE_ASSERT(false);
+	// allow to ignore unions
       }
     }
   }

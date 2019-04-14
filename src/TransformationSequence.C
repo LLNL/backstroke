@@ -484,8 +484,12 @@ void Backstroke::TransformationSequence::applyToFile(OriginalFile& originalFile)
           }
           // Generate names for all anonymous classes/structs/unions to allow constructors to be named
           if(ci.isAnonymous()) {
-            if(_commandLineOptions->optionDebug()) cout<<"DEBUG: found anonymous: "<<ci.className()<<":"<<startLine<<","<<startCol<<endl;
-            _editSequence.addToInsert(startLine,startCol+ci.keyWordLength()," "+ci.className()+" ");
+	    if(_commandLineOptions->optionUnion()==false && ci.isUnion()) {
+	      // skip unions if command line option for ignoring unions is used
+	    } else {
+	      if(_commandLineOptions->optionDebug()) cout<<"DEBUG: found anonymous: "<<ci.className()<<":"<<startLine<<","<<startCol<<endl;
+	      _editSequence.addToInsert(startLine,startCol+ci.keyWordLength()," "+ci.className()+" ");
+	    }
           }
 #endif
           if(ci.injectionLine()>=0 && ci.hasDefaultProtectedOrPrivateDestructor()) {

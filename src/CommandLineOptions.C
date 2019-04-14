@@ -218,6 +218,7 @@ Backstroke::CommandLineOptions::process(int argc, char* argv[]) {
     ("no-preprocessor", "turns off the pre-processing of the input file.")
     ("no-optimization", "turns off optimization. Does not optimize the use of local (auto) variables.")
     ("no-transform", "only parses and generates the original code, does not perform any transformation (only useful for testing).")
+    ("ignore-unions", "does not generate assignment operator for unions")
     ("trace", "shows a trace of all transformations performed to obtain reversible code.")
     ("stats", "print transformation statistics.")
     ("stats-csv-file",po::value< string >(), "write transformation statistics in CSV format to file [arg].")
@@ -237,7 +238,6 @@ Backstroke::CommandLineOptions::process(int argc, char* argv[]) {
     ("no-assign-op","do not generate reversible assignment operators (only useful for testing).")
     ("default-ops", "generates default operator(s)")
     ("no-default-ops", "does not generate default operator(s)")
-    ("ignore-unions", "does not generate assignment operator for unions")
     ("ignore-bitfields", "ignores assignments to bitfields")
     ("copy-constr","generate reversible copy constructors")
     ("no-copy-constr","dot not generate reversible copy constructors. [default]")
@@ -354,8 +354,8 @@ Backstroke::CommandLineOptions::process(int argc, char* argv[]) {
   if (args.count("version")) {
     _optionVersion=true;
     _isFinished=true;
-    cout << "Version 2.1.2"<<endl;
-    cout << "Written by Markus Schordan 2014-2018."<<endl;
+    cout << "Version 2.1.3"<<endl;
+    cout << "Written by Markus Schordan 2014-2019."<<endl;
   }
   if (args.count("trace")) {
     _optionShowTransformationTrace=true;
