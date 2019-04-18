@@ -694,8 +694,6 @@ Backstroke::RunTimeStateStore::~RunTimeStateStore() {
       delete eventRecord;
     } 
     break;
-  default:
-    throw Backstroke::Exception("unknown event record allocation mode.");
   } // switch
 }
 
