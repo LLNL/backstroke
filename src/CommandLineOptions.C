@@ -354,7 +354,7 @@ Backstroke::CommandLineOptions::process(int argc, char* argv[]) {
   if (args.count("version")) {
     _optionVersion=true;
     _isFinished=true;
-    cout << "Version 2.1.3"<<endl;
+    cout << "Version 2.1.4"<<endl;
     cout << "Written by Markus Schordan 2014-2019."<<endl;
   }
   if (args.count("trace")) {
