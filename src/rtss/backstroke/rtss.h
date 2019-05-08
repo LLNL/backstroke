@@ -1112,31 +1112,19 @@ inline bool xpdes::dataRecording() {
 // LEVEL 1                                               //
 ///////////////////////////////////////////////////////////
 template <typename T> T& xpdes::avpushT(T& lhs) {
-  if(xpdes::dataRecording()) {
-    internalRTSS->avpushT(lhs);
-  }
-  return lhs;
+  return internalRTSS->avpushT(lhs);
 }
   
 template <typename T>  T*& xpdes::avpushT(T*& lhs) {
-  if(xpdes::dataRecording()) {
-    internalRTSS->avpushT(lhs);
-  }
-  return lhs;
+  return internalRTSS->avpushT(lhs);
 }
 
 template <typename T> T* xpdes::registerAllocationT(T* mem) {
-  if(xpdes::dataRecording()) {
-    internalRTSS->registerAllocationT(mem);
-  }
-  return mem;
+  return internalRTSS->registerAllocationT(mem);
 }
 
 template <typename T> T* xpdes::registerOperatorNewT(T* mem) {
-  if(xpdes::dataRecording()) {
-    internalRTSS->registerAllocationT(mem);
-  }
-  return mem;
+  return internalRTSS->registerAllocationT(mem);
 }
 
 template <typename T> void xpdes::registerDeallocationT(T* mem) {
@@ -1149,6 +1137,7 @@ template <typename T> void xpdes::operatorDeleteT(T* mem) {
 
 #pragma reversible map forward=original
 template <typename T> T* xpdes::allocateArrayT(size_t numberOfElements) {
+  // check of mode is required (not performed in allocateArray)
   if(xpdes::dataRecording()) {
     T* a=(T*) internalRTSS->allocateArray(numberOfElements,sizeof(T));
     return a;
@@ -1159,6 +1148,7 @@ template <typename T> T* xpdes::allocateArrayT(size_t numberOfElements) {
 
 #pragma reversible map forward=original
 template <typename T> void xpdes::registerArrayDeallocationT(T* deleteOperand) {
+  // check of mode is required (not performed in registerArrayDeallocation)
   if(xpdes::dataRecording()) {
     internalRTSS->registerArrayDeallocation(deleteOperand);
   } else {
