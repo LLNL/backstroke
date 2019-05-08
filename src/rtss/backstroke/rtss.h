@@ -487,6 +487,7 @@ class RunTimeStateStore {
   }
   static bool setDataRecording(bool flag) {
     bool tmp=_dataRecording;
+#pragma reversible map forward=original
     _dataRecording=flag;
     return tmp;
   }
@@ -1139,15 +1140,11 @@ template <typename T> T* xpdes::registerOperatorNewT(T* mem) {
 }
 
 template <typename T> void xpdes::registerDeallocationT(T* mem) {
-  if(xpdes::dataRecording()) {
-    internalRTSS->registerDeallocationT(mem);
-  }
+  internalRTSS->registerDeallocationT(mem);
 }
 
 template <typename T> void xpdes::operatorDeleteT(T* mem) {
-  if(xpdes::dataRecording()) {
-    internalRTSS->operatorDeleteT(mem);
-  }
+  internalRTSS->operatorDeleteT(mem);
 }
 
 #pragma reversible map forward=original
