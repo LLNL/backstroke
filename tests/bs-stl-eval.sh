@@ -5,14 +5,16 @@
 : ${TOOL1:=g++}
 : ${TOOL2:=backstroke}
 
-BS_INPUT_LANG_STANDARD=c++11
-BS_OUTPUT_LANG_STANDARD=c++11
+BS_INPUT_LANG_STANDARD=c++14
+BS_INPUT_LANG_STANDARD_OPTION=-std=c++14
+BS_OUTPUT_LANG_STANDARD=c++14
+BS_INPUT_LANG_STANDARD_OPTION=-std=c++14
 
 STL_HEADERS_ALL="algorithm bitset complex deque exception fstream functional iomanip ios iosfwd iostream istream iterator limits list locale map memory new numeric ostream queue set sstream stack stdexcept streambuf string typeinfo utility valarray vector"
 
-STL_HEADERS_PASS="bitset complex deque exception fstream iomanip ios iosfwd iostream istream iterator limits list locale map new numeric ostream queue set sstream stack stdexcept streambuf string typeinfo utility vector"
+STL_HEADERS_PASS="algorithm bitset complex deque exception fstream functional ios iosfwd iostream istream iterator limits list map new numeric ostream queue set sstream stack stdexcept streambuf string typeinfo utility valarray vector"
 
-STL_HEADERS_FAIL="algorithm functional memory valarray"
+STL_HEADERS_FAIL="memory iomanip locale"
 
 rm -f *.pass.C *.fail.C *.o *.pp.C *.ti
 
@@ -30,11 +32,11 @@ BS_ACCESS_MODE="--access-mode=1"
 BACKSTROKE=../src/backstroke
 BS_RTLIB_INCLUDE_OPTIONS=-I../src/rtss
 BS_STL_SUPPORT=
-#BS_RESTRICTIONS=--ignore-unions
-BS_RESTRICTIONS=
+BS_RESTRICTIONS=--ignore-unions
 BS_LIB_INCLUDE_OPTION_CHECK="-include backstroke/rtss.h"
 BS_LIB_INCLUDE_OPTION="--rtss-header"
-GCC_OPTIONS=-fabi-version=6
+#GCC_OPTIONS="-fabi-version=6" # only required for g++ 4.9
+GCC_OPTIONS="-fpermissive"
 
 echo "BS_RTLIB_INCLUDE_OPTIONS: ${BS_RTLIB_INCLUDE_OPTIONS}"
 
@@ -42,24 +44,29 @@ echo "-----------------------------------------------------------------"
 echo "STL TEST: header transformation and compile test (no run tests)"
 echo "C++ input/output language standard: ${BS_INPUT_LANG_STANDARD}/${BS_OUTPUT_LANG_STANDARD}"
 echo "-----------------------------------------------------------------"
+echo "Note: using g++ options: $GCC_OPTIONS"
+echo "Unsupported C++ constructs: unions, bitfields."
+echo "Unsupported STL headers: $STL_HEADERS_FAIL"
+echo "Supported   STL headers: $STL_HEADERS_PASS"
+echo "-----------------------------------------------------------------"
 
 for header in $STL_HEADERS_PASS; do
   printf "TESTING: %-17s: " "$header"
   printf "#include <$header>\nint main(){ return 0; }\n" > test_${header}.C
 
-  g++           -std=$BS_INPUT_LANG_STANDARD -E -P         test_${header}.C ${BS_RTLIB_INCLUDE_OPTIONS} ${BS_LIB_INCLUDE_OPTION_CHECK} > test_${header}.check.C 
+  g++ $BS_INPUT_LANG_STANDARD_OPTION -E -P test_${header}.C ${BS_RTLIB_INCLUDE_OPTIONS} ${BS_LIB_INCLUDE_OPTION_CHECK} > test_${header}.check.C 
   #${BACKSTROKE} -std=$BS_INPUT_LANG_STANDARD -edg:E -edg:P test_${header}.C ${BS_RTLIB_INCLUDE_OPTIONS} ${BS_LIB_INCLUDE_OPTION}  > test_${header}.pp.C 
 
   LOC=`wc -l test_${header}.check.C| cut -f1 -d' '`
   printf "%6s LOC : " "$LOC"
   # use a sub shell and redirect coredump output of subshell to /dev/null
   {
-  $BACKSTROKE --no-preprocessor $BS_RTLIB_INCLUDE_OPTIONS $BS_RESTRICTIONS $BS_BACKEND $BS_ACCESS_MODE $BS_INCLUDE --no-transform test_${header}.C -std=$BS_INPUT_LANG_STANDARD &> /dev/null
+  $BACKSTROKE --no-preprocessor $BS_RTLIB_INCLUDE_OPTIONS $BS_RESTRICTIONS $BS_BACKEND $BS_ACCESS_MODE $BS_INCLUDE --no-transform test_${header}.C $BS_INPUT_LANG_STANDARD_OPTION &> /dev/null
   } > /dev/null 2>&1
   if [ $? -eq 0 ]; then
       echo -n "PASS " # 0
   {
-  $BACKSTROKE --preprocessor $BS_LIB_INCLUDE_OPTION $BS_RTLIB_INCLUDE_OPTIONS $BS_RESTRICTIONS $BS_BACKEND $BS_ACCESS_MODE $BS_INCLUDE --stats-csv-file=test_${header}.csv test_${header}.C -std=$BS_INPUT_LANG_STANDARD &> /dev/null
+  $BACKSTROKE --preprocessor $BS_LIB_INCLUDE_OPTION $BS_RTLIB_INCLUDE_OPTIONS $BS_RESTRICTIONS $BS_BACKEND $BS_ACCESS_MODE $BS_INCLUDE --stats-csv-file=test_${header}.csv test_${header}.C $BS_INPUT_LANG_STANDARD_OPTION &> /dev/null
   } > /dev/null 2>&1
   if [ $? -eq 0 ]; then
       cp test_${header}.C.pp.C $header.pass.C
@@ -67,7 +74,7 @@ for header in $STL_HEADERS_PASS; do
       if [ -e backstroke_test_${header}.C ]
       then
           cp backstroke_test_${header}.C backstroke_test_$header.t1.pass.C
-          ${TOOL1} -std=$BS_OUTPUT_LANG_STANDARD $BS_RTLIB_INCLUDE_OPTIONS backstroke_test_${header}.C -w -Wfatal-errors $BS_STL_SUPPORT $GCC_OPTIONS #> /dev/null 2>&1
+          ${TOOL1} $BS_OUTPUT_LANG_STANDARD_OPTION $BS_RTLIB_INCLUDE_OPTIONS backstroke_test_${header}.C -w -Wfatal-errors $BS_STL_SUPPORT $GCC_OPTIONS #> /dev/null 2>&1
            if [ $? -eq 0 ]; then
               cp backstroke_test_${header}.C backstroke_test_$header.t2.pass.C
               echo -n " PASS : 100.00%" # 2
@@ -75,11 +82,11 @@ for header in $STL_HEADERS_PASS; do
               echo -n `cat test_${header}.csv` | tr "\n" " "
           else
               # determine line number of error
-              ERROR_LINE1=`${TOOL1} -std=${BS_OUTPUT_LANG_STANDARD} ${BS_RTLIB_INCLUDE_OPTIONS} backstroke_test_${header}.pp.C -w -Wfatal-errors ${BS_STL_SUPPORT} 2>&1 | egrep backstroke_test_${header}.pp.C:[0-9]*:[0-9] | cut -f2 -d:`
+              ERROR_LINE1=`${TOOL1} ${BS_OUTPUT_LANG_STANDARD_OPTION} ${BS_RTLIB_INCLUDE_OPTIONS} backstroke_test_${header}.pp.C -w -Wfatal-errors ${BS_STL_SUPPORT} 2>&1 | egrep backstroke_test_${header}.pp.C:[0-9]*:[0-9] | cut -f2 -d:`
               if [[ -z "${ERROR_LINE1// }" ]]
               then
                   # rerun and check for linker errors
-                  ERROR_LINE2=`${TOOL1} -std=${BS_OUTPUT_LANG_STANDARD} ${BS_RTLIB_INCLUDE_OPTIONS} backstroke_test_${header}.pp.C -w -Wfatal-errors ${BS_STL_SUPPORT} 2>&1 | egrep "undefined reference" | wc -l`
+                  ERROR_LINE2=`${TOOL1} ${BS_OUTPUT_LANG_STANDARD_OPTION} ${BS_RTLIB_INCLUDE_OPTIONS} backstroke_test_${header}.pp.C -w -Wfatal-errors ${BS_STL_SUPPORT} 2>&1 | egrep "undefined reference" | wc -l`
                   if [[ -z "${ERROR_LINE2// }" ]]
                   then
                       ERROR_LINE=" : ${RED}UNKNOWN ERROR${COLOREND}"
@@ -90,7 +97,7 @@ for header in $STL_HEADERS_PASS; do
                   ERROR_PERCENTAGE=`echo "scale=2; ${ERROR_LINE1}*100/${LOC}" | bc`
                   echo -en " ${RED}FAIL${COLOREND}"
                   printf " : %6s%% (LINE:%s)" "$ERROR_PERCENTAGE" "$ERROR_LINE1" # 2
-                  echo -n " [ ${TOOL1} -std=$BS_OUTPUT_LANG_STANDARD backstroke_test_${header}.pp.C -w -Wfatal-errors $BS_STL_SUPPORT]"
+                  echo -n " [ ${TOOL1} $BS_OUTPUT_LANG_STANDARD_OPTION backstroke_test_${header}.pp.C -w -Wfatal-errors $BS_STL_SUPPORT]"
               fi
                       
               cp backstroke_test_${header}.C backstroke_test_$header.t2.fail.C
